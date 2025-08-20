@@ -10,7 +10,7 @@ client.setProject(PROJECT_ID);
 
 const database = new Databases(client);
 
-export default async function updateSearchCount(searchTerm, movie) {
+export async function updateSearchCount(searchTerm, movie) {
   try {
     // 1. Check if the search term exists
     const result = await database.listDocuments(
@@ -47,4 +47,16 @@ export default async function updateSearchCount(searchTerm, movie) {
   } catch (error) {
     console.error("Error updating search count:", error);
   }
+}
+
+export async function getTrendingMovies(){
+    try {
+        const result = await database.listDocuments(DATABASE_ID,COLLECTION_ID,[
+            Query.limit(5),
+            Query.orderDesc("count")
+        ])
+        return result.documents;
+    } catch (error) {
+        console.log(error)
+    }
 }
